@@ -2,7 +2,6 @@ import logging
 import os
 import emoji
 from telegram.ext import Updater, CommandHandler, MessageHandler, Filters
-#from binance import Client, ThreadedWebsocketManager, ThreadedDepthCacheManager
 
 # Enables logging
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
@@ -16,9 +15,7 @@ PORT = int(os.environ.get('PORT', '8443'))
 # We define command handlers. Error handlers also receive the raised TelegramError object in error.
 def start(update, context):
     """Sends a message when the command /start is issued."""
-    update.message.reply_text('🤖 Добро пожаловать в myBinanceBot!\n\n'+
-                    '💸 В ответ на тикер myBinanceBot вышлет вам лучшую цену покупки и продажи\n\n'+
-                    'ℹ️Для получения более подробной информации введите \help')
+    update.message.reply_text('Добро пожаловать в myBinanceBot!')
 
 
 def help(update, context):
