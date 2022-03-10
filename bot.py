@@ -16,7 +16,7 @@ PORT = int(os.environ.get('PORT', '8443'))
 def start(update, context):
     """Sends a message when the command /start is issued."""
     update.message.reply_text('🤖 Добро пожаловать в myBinanceBot!\n\n'+
-                    '💸 В ответ на тикер myBinanceBot вышлет вам лучшую цену покупки и продажи\n\n'+
+                    '💸 В ответ на тикер myBinanceBot вышлет вам лучшую цену покупки и продажи в паре с USDT\n\n'+
                     'ℹ️ Для получения более подробной информации нажмите /help')
 
 def help(update, context):
