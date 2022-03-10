@@ -1,6 +1,7 @@
 import logging
 import os
 import emoji
+from boto.s3.connection import S3Connection
 from telegram.ext import Updater, CommandHandler, MessageHandler, Filters
 
 # Enables logging
@@ -39,9 +40,11 @@ def main():
     # Creates the Updater and pass it your bot's token.
     # Make sure to set use_context=True to use the new context based callbacks
     # Post version 12 this will no longer be necessary
-    TOKEN = '5164276901:AAFHKb9hAWKdvOV_GHOZLrJlzmGOpoIK-S4'  # enter your token here
-    APP_NAME = 'https://my-own-binance-bot.herokuapp.com/'  # Edit the heroku app-name
+    #TOKEN = '5164276901:AAFHKb9hAWKdvOV_GHOZLrJlzmGOpoIK-S4'  # enter your token here
+    #APP_NAME = 'https://my-own-binance-bot.herokuapp.com/'  # Edit the heroku app-name
 
+    TOKEN = os.environ.get('BOT_TOKEN',None)
+    APP_NAME = os.environ.get('BOT_APP_NAME',None)
     updater = Updater(TOKEN, use_context=True)
 
     # Get the dispatcher to register handlers
