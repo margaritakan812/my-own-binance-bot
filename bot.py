@@ -17,8 +17,7 @@ def start(update, context):
     """Sends a message when the command /start is issued."""
     update.message.reply_text('🤖 Добро пожаловать в myBinanceBot!\n\n'+
                     '💸 В ответ на тикер myBinanceBot вышлет вам лучшую цену покупки и продажи\n\n'+
-                    'ℹ️Для получения более подробной информации введите \help')
-
+                    'ℹ️Для получения более подробной информации введите /help')
 
 def help(update, context):
     """Sends a message when the command /help is issued."""
