@@ -22,8 +22,11 @@ def start(update, context):
 
 def help(update, context):
     """Sends a message when the command /help is issued."""
-    update.message.reply_text('Help!')
-
+    update.message.reply_text('₿ Для получения лучшей цены сделок просто введите тикер. Например:\n\n'+
+                              '👨‍💻: BTC\n\n'+
+                              '🤖:\n'+
+                              ' 📉 Покупка: 39449.61000000 USDT'+
+                              ' 📈 Продажа: 39449.60000000 USDT󠀠')
 
 def echo(update, context):
     """Echos the user message."""
@@ -43,9 +46,9 @@ def main():
     #TOKEN = '5164276901:AAFHKb9hAWKdvOV_GHOZLrJlzmGOpoIK-S4'  # enter your token here
     #APP_NAME = 'https://my-own-binance-bot.herokuapp.com/'  # Edit the heroku app-name
 
-    TOKEN = os.environ.get('BOT_TOKEN',None)
-    APP_NAME = os.environ.get('BOT_APP_NAME',None)
-    updater = Updater(TOKEN, use_context=True)
+    token = os.environ.get('BOT_TOKEN', None)
+    app_name = os.environ.get('BOT_APP_NAME', None)
+    updater = Updater(token, use_context=True)
 
     # Get the dispatcher to register handlers
     dp = updater.dispatcher
@@ -59,7 +62,7 @@ def main():
 
     # log all errors
     dp.add_error_handler(error)
-    updater.start_webhook(listen="0.0.0.0", port=PORT, url_path=TOKEN, webhook_url=APP_NAME + TOKEN)
+    updater.start_webhook(listen="0.0.0.0", port=PORT, url_path=token, webhook_url=app_name + token)
     updater.idle()
 
 
