@@ -1,7 +1,7 @@
 import logging
 import os
 from telegram.ext import Updater, CommandHandler, MessageHandler, Filters
-from googletrans import Translator
+from deep_translator import GoogleTranslator
 from binance.client import Client
 from binance.exceptions import BinanceAPIException
 
@@ -34,7 +34,7 @@ def help(update, context):
                               '    📈 Продажа: 39449.60 USDT󠀠')
 
 
-def treatSymbol(update, context):
+def treat_symbol(update, context):
     message = ''
     try:
         depth = client.get_order_book(symbol=update.message.text + 'USDT')
@@ -43,9 +43,8 @@ def treatSymbol(update, context):
         message = '📉 Покупка: ' + str(ask_best_price) + ' USDT\n' + \
                   '📈 Продажа: ' + str(bid_best_price) + ' USDT󠀠'
     except BinanceAPIException as e:
-        translator = Translator()
-        translated = translator.translate(e.message, src='en', dest='ru')
-        message = '☹️ Ошибка: ' + translated.text
+        translated = GoogleTranslator(source='en', target='ru').translate(e.message)
+        message = '☹️ Ошибка: ' + translated
     update.message.reply_text(message)
 
 
@@ -74,7 +73,7 @@ def main():
     dp.add_handler(CommandHandler("help", help))
 
     # on noncommand i.e message - echo the message on Telegram
-    dp.add_handler(MessageHandler(Filters.text, treatSymbol))
+    dp.add_handler(MessageHandler(Filters.text, treat_symbol))
 
     # log all errors
     dp.add_error_handler(error)
