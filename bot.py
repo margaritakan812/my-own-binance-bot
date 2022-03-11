@@ -4,6 +4,7 @@ from telegram.ext import Updater, CommandHandler, MessageHandler, Filters
 from deep_translator import GoogleTranslator
 from binance.client import Client
 from binance.exceptions import BinanceAPIException
+import decimal
 
 # Enables logging
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
@@ -15,6 +16,8 @@ PORT = int(os.environ.get('PORT', '8443'))
 
 client = Client(os.environ.get('API_KEY'),
                 os.environ.get('API_SECRET'))
+
+info = client.get_exchange_info()
 
 
 # We define command handlers. Error handlers also receive the raised TelegramError object in error.
@@ -30,16 +33,27 @@ def help(update, context):
     update.message.reply_text('⚡ Для получения лучшей цены сделок просто введите тикер. Например:\n\n' +
                               '👨‍💻: BTC\n\n' +
                               '🤖:\n' +
-                              '    📉 Покупка: 39449.61 USDT\n' +
-                              '    📈 Продажа: 39449.60 USDT󠀠')
+                              '    📉 Покупка: 39449.61000 USDT\n' +
+                              '    📈 Продажа: 39449.60000 USDT󠀠')
+
+
+def get_precision(symbol):
+    for x in info['symbols']:
+        if x['symbol'] == symbol:
+            for y in x['filters']:
+                if y['filterType'] == 'LOT_SIZE':
+                    print(y['stepSize'])
+                    return abs(decimal.Decimal(y['stepSize']).normalize().as_tuple().exponent)
 
 
 def treat_symbol(update, context):
     message = ''
     try:
-        depth = client.get_order_book(symbol=update.message.text + 'USDT')
-        bid_best_price = depth.get('bids')[0][0]
-        ask_best_price = depth.get('asks')[0][0]
+        symbol = update.message.text + 'USDT'
+        precision = get_precision(symbol)
+        depth = client.get_order_book(symbol=symbol)
+        bid_best_price = round(depth.get('bids')[0][0], precision)
+        ask_best_price = round(depth.get('asks')[0][0], precision)
         message = '📉 Покупка: ' + str(ask_best_price) + ' USDT\n' + \
                   '📈 Продажа: ' + str(bid_best_price) + ' USDT󠀠'
     except BinanceAPIException as e:
