@@ -1,8 +1,9 @@
 import logging
 import os
-import emoji
-from boto.s3.connection import S3Connection
 from telegram.ext import Updater, CommandHandler, MessageHandler, Filters
+from googletrans import Translator
+from binance.client import Client
+from binance.exceptions import BinanceAPIException
 
 # Enables logging
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
@@ -12,6 +13,8 @@ logger = logging.getLogger(__name__)
 
 PORT = int(os.environ.get('PORT', '8443'))
 
+client = Client(os.environ.get('API_KEY'),
+                os.environ.get('API_SECRET'))
 
 # We define command handlers. Error handlers also receive the raised TelegramError object in error.
 def start(update, context):
@@ -25,12 +28,22 @@ def help(update, context):
     update.message.reply_text('⚡ Для получения лучшей цены сделок просто введите тикер. Например:\n\n'+
                               '👨‍💻: BTC\n\n'+
                               '🤖:\n'+
-                              '    📉 Покупка: 39449.61000000 USDT\n'+
-                              '    📈 Продажа: 39449.60000000 USDT󠀠')
+                              '    📉 Покупка: 39449.61 USDT\n'+
+                              '    📈 Продажа: 39449.60 USDT󠀠')
 
-def echo(update, context):
-    """Echos the user message."""
-    update.message.reply_text(update.message.text)
+def treatSymbol(update, context):
+    message = ''
+    try:
+        depth = client.get_order_book(symbol=update.message.text+'USDT')
+        bid_best_price = depth.get('bids')[0][0]
+        ask_best_price = depth.get('asks')[0][0]
+        message = '📉 Покупка: ' + str(ask_best_price) + ' USDT\n'+\
+                  '📈 Продажа: ' + str(bid_best_price) + ' USDT󠀠'
+    except BinanceAPIException as e:
+        translator = Translator()
+        translated = translator.translate(e.message, src='en', dest='ru')
+        message = '☹️Ошибка: '+translated
+    update.message.reply_text(message)
 
 
 def error(update, context):
@@ -58,7 +71,7 @@ def main():
     dp.add_handler(CommandHandler("help", help))
 
     # on noncommand i.e message - echo the message on Telegram
-    dp.add_handler(MessageHandler(Filters.text, echo))
+    dp.add_handler(MessageHandler(Filters.text, treatSymbol))
 
     # log all errors
     dp.add_error_handler(error)
