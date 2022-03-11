@@ -42,7 +42,6 @@ def get_precision(symbol):
         if x['symbol'] == symbol:
             for y in x['filters']:
                 if y['filterType'] == 'LOT_SIZE':
-                    print(y['stepSize'])
                     return abs(decimal.Decimal(y['stepSize']).normalize().as_tuple().exponent)
 
 
