@@ -54,8 +54,9 @@ def treat_symbol(update, context):
         depth = client.get_order_book(symbol=symbol)
         bid_best_price = round(depth.get('bids')[0][0], precision)
         ask_best_price = round(depth.get('asks')[0][0], precision)
-        message = '📉 Покупка: ' + str(ask_best_price) + ' USDT\n' + \
-                  '📈 Продажа: ' + str(bid_best_price) + ' USDT󠀠'
+        message = str(precision)
+        #message = '📉 Покупка: ' + str(ask_best_price) + ' USDT\n' + \
+        #          '📈 Продажа: ' + str(bid_best_price) + ' USDT󠀠'
     except BinanceAPIException as e:
         translated = GoogleTranslator(source='en', target='ru').translate(e.message)
         message = '☹️ Ошибка: ' + translated
