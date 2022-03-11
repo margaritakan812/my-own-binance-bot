@@ -74,8 +74,6 @@ def main():
     # Creates the Updater and pass it your bot's token.
     # Make sure to set use_context=True to use the new context based callbacks
     # Post version 12 this will no longer be necessary
-    # TOKEN = '5164276901:AAFHKb9hAWKdvOV_GHOZLrJlzmGOpoIK-S4'  # enter your token here
-    # APP_NAME = 'https://my-own-binance-bot.herokuapp.com/'  # Edit the heroku app-name
 
     token = os.environ.get('BOT_TOKEN', None)
     app_name = os.environ.get('BOT_APP_NAME', None)
