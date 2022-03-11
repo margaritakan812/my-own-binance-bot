@@ -49,10 +49,12 @@ def get_precision(symbol):
 
 
 def treat_symbol(update, context):
-    message = ''
+    message = '☹️ Ошибка: '
     try:
         symbol = update.message.text + 'USDT'
         depth = client.get_order_book(symbol=symbol)
+        if len(depth.get('bids')) == 0 or len(depth.get('asks')) == 0:
+            raise KeyError('Нет данных о тикере.')
         precision = get_precision(symbol)
         bid_best_price = round(decimal.Decimal(depth.get('bids')[0][0]), precision)
         ask_best_price = round(decimal.Decimal(depth.get('asks')[0][0]), precision)
@@ -60,7 +62,9 @@ def treat_symbol(update, context):
                   '📈 Продажа: ' + str(bid_best_price) + ' USDT󠀠'
     except BinanceAPIException as e:
         translated = GoogleTranslator(source='en', target='ru').translate(e.message)
-        message = '☹️ Ошибка: ' + translated
+        message += translated
+    except KeyError as ke:
+        message += str(ke).replace("'", "")
     update.message.reply_text(message)
 
 
