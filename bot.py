@@ -33,8 +33,8 @@ def help(update, context):
     update.message.reply_text('⚡ Для получения лучшей цены сделок просто введите тикер. Например:\n\n' +
                               '👨‍💻: BTC\n\n' +
                               '🤖:\n' +
-                              '    📉 Покупка: 39449.61000 USDT\n' +
-                              '    📈 Продажа: 39449.60000 USDT󠀠')
+                              '    📉 Покупка: 39449.61 USDT\n' +
+                              '    📈 Продажа: 39449.60 USDT󠀠')
 
 
 info = client.get_exchange_info()
@@ -44,8 +44,8 @@ def get_precision(symbol):
     for x in info['symbols']:
         if x['symbol'] == symbol:
             for y in x['filters']:
-                if y['filterType'] == 'LOT_SIZE':
-                    return abs(decimal.Decimal(y['stepSize']).normalize().as_tuple().exponent)
+                if y['filterType'] == 'PRICE_FILTER':
+                    return abs(decimal.Decimal(y['tickSize']).normalize().as_tuple().exponent)
 
 
 def treat_symbol(update, context):
