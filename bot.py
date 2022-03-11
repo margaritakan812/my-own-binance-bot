@@ -52,8 +52,8 @@ def treat_symbol(update, context):
     message = ''
     try:
         symbol = update.message.text + 'USDT'
+        depth = client.get_order_book(symbol=symbol)
         precision = get_precision(symbol)
-        #depth = client.get_order_book(symbol=symbol)
         #bid_best_price = round(depth.get('bids')[0][0], precision)
         #ask_best_price = round(depth.get('asks')[0][0], precision)
         message = str(precision)
