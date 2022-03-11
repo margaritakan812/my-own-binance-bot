@@ -40,9 +40,9 @@ def treatSymbol(update, context):
         message = '📉 Покупка: ' + str(ask_best_price) + ' USDT\n'+\
                   '📈 Продажа: ' + str(bid_best_price) + ' USDT󠀠'
     except BinanceAPIException as e:
-        translator = Translator()
-        translated = translator.translate(e.message, src='en', dest='ru')
-        message = '☹️Ошибка: '+translated
+        #translator = Translator()
+        #translated = translator.translate(e.message, src='en', dest='ru')
+        message = '☹️Ошибка: '
     update.message.reply_text(message)
 
 
