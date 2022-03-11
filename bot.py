@@ -17,7 +17,7 @@ PORT = int(os.environ.get('PORT', '8443'))
 client = Client(os.environ.get('API_KEY'),
                 os.environ.get('API_SECRET'))
 
-info = client.get_exchange_info()
+
 
 
 # We define command handlers. Error handlers also receive the raised TelegramError object in error.
@@ -37,6 +37,9 @@ def help(update, context):
                               '    📈 Продажа: 39449.60000 USDT󠀠')
 
 
+info = client.get_exchange_info()
+
+
 def get_precision(symbol):
     for x in info['symbols']:
         if x['symbol'] == symbol:
@@ -50,9 +53,9 @@ def treat_symbol(update, context):
     try:
         symbol = update.message.text + 'USDT'
         precision = get_precision(symbol)
-        depth = client.get_order_book(symbol=symbol)
-        bid_best_price = round(depth.get('bids')[0][0], precision)
-        ask_best_price = round(depth.get('asks')[0][0], precision)
+        #depth = client.get_order_book(symbol=symbol)
+        #bid_best_price = round(depth.get('bids')[0][0], precision)
+        #ask_best_price = round(depth.get('asks')[0][0], precision)
         message = str(precision)
         #message = '📉 Покупка: ' + str(ask_best_price) + ' USDT\n' + \
         #          '📈 Продажа: ' + str(bid_best_price) + ' USDT󠀠'
